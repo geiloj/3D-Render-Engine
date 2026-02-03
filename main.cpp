@@ -37,6 +37,14 @@ Point rotate_xz(Point p, float angle) {
     };
 
 }
+Point rotate_yz(Point p, float angle) {
+    return {
+        p.x,
+        p.y * std::cos(angle) - p.z * std::sin(angle),
+        p.y * std::sin(angle) + p.z * std::cos(angle)
+    };
+
+}
 void line(sf::Vector2f p1, sf::Vector2f p2, sf::RenderWindow& window) {
     std::array line =
     {
@@ -76,6 +84,8 @@ int main()
         float angle = 0;
         float dz = 0;
         float distance = 2;
+        sf::Vector2f viewdirection = sf::Vector2f(0,0);
+        float deltaup = 0;
     while (window.isOpen())
     {
         while (const std::optional event = window.pollEvent())
@@ -84,13 +94,11 @@ int main()
                 window.close();
         }
         dz += 1.0 / FPS;
-        angle += 2*M_PI;
+        
         window.clear();
 
         for (int x = 0; x < std::size(faces);x++) {
             for (int y = 0;y < std::size(faces[x]);y++) {
-                const struct Point a = Cube[faces[x][y]];
-                const struct Point b = Cube[faces[x][(y+1)%std::size(faces[x])]];
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::W))
                 {
                     distance -= 0.001;
@@ -98,9 +106,35 @@ int main()
                 {
                     distance += 0.001;
                 }
+                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Left)) {
+                    viewdirection.x += 0.5;
+                }
+                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Right)) {
+                    viewdirection.x -= 0.5;
+                }
+                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Down)) {
+                    viewdirection.y -= 0.5;
+                }
+                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Up)) {
+                    viewdirection.y += 0.5;
+                }
+                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Space)) {
+                    deltaup -= 0.001;
+                }
+                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::LShift)) {
+                    deltaup += 0.001;
+                }
+                struct Point a = Cube[faces[x][y]];
+                struct Point b = Cube[faces[x][(y+1)%std::size(faces[x])]];
+                a.y += deltaup;
+                b.y += deltaup;
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::A)) {
+                }
+                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::D)) {
+                }
                 line(
-                    project(translate(updateZ(rotate_xz(a, dz), distance))),
-                    project(translate(updateZ(rotate_xz(b, dz), distance))),
+                    project(translate(updateZ(rotate_xz(a, dz), distance))) + viewdirection,
+                    project(translate(updateZ(rotate_xz(b, dz), distance))) + viewdirection,
                     window
                     );
             }
