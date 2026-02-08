@@ -4,22 +4,23 @@
 #include <iostream>
 #include "Camera.h"
 #include "Cube.h"
-#define WIDTH 800
-#define HEIGTH 800
-#define FPS 60
+
+constexpr unsigned long WIDTH = 1000;
+constexpr unsigned long HEIGTH = 1000;
+constexpr unsigned long FPS = 60;
 
 int main()
 {
     sf::RenderWindow window(sf::VideoMode({ WIDTH, HEIGTH }), "3D Render Engine!");
     Cube cube = Cube({ 0,0,0 }, { 0,0,0 }, WIDTH, HEIGTH);
-    Cube cube2 = Cube({ 0,0,0 }, { 0,0,0 }, WIDTH, HEIGTH);
 	Camera camera = Camera({ 0,0,-5 }, { 0,0,1 });
 
     window.setFramerateLimit(FPS);
-        sf::Vector2f viewdirection = sf::Vector2f(0,0);
+    Point viewdirection = { 0,0,0, };
 
 
-        float angle = 0;
+        float yaw = 0;
+        float pitch = 0;
         float dz = 0;
     while (window.isOpen())
     {
@@ -47,17 +48,17 @@ int main()
 			camera.position.x += 0.02;
 		}
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Left)) {
-            viewdirection.x += 4;
-        }
+                yaw += 0.1;
+            }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Right)) {
-            viewdirection.x -= 4;
-        }
+                yaw -= 0.1;
+            }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Down)) {
-            viewdirection.y -= 4;
-        }
+                pitch -= 0.1;
+            }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Up)) {
-            viewdirection.y += 4;
-        }
+                pitch += 0.1;
+            }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Space)) {
 			camera.position.y += 0.1;
         }
@@ -65,18 +66,18 @@ int main()
 			camera.position.y -= 0.1;
         }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Q)) {
-            cube.move({0,0.1,0});
+            
         }
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::E)) {
-            cube.move({ 0,-0.1,0 });
-        }    
-        cube.rotateY(-dz);
-        cube.rotateX(dz);
-        cube.rotateZ(-dz);
+
+            }    
+             viewdirection = { cos(pitch) * sin(yaw),sin(pitch),cos(pitch) * cos(yaw) };
+        
+        cube.rotate({dz,dz,dz});
+
         cube.draw(window, camera, viewdirection);
-        cube2.draw(window, camera, viewdirection);
+		std::cout << cube.position.z << std::endl;
         window.display();
         cube.clean();
-        cube2.clean();
     }
 }

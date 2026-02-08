@@ -13,7 +13,8 @@ public:
     void rotateX(float angle);
     void rotateY(float angle);
     void rotateZ(float angle);
-    void draw(sf::RenderWindow& window, Camera camera, sf::Vector2f viewdirection);
+    void rotate(Point angle);
+    void draw(sf::RenderWindow& window, Camera camera, Point viewdirection);
     void clean();
     Point position;
     Point dimensions;

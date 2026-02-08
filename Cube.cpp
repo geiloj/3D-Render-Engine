@@ -15,21 +15,20 @@ Cube::Cube(Point position, Point dimension, unsigned int w, unsigned int h)
 void Cube::setPosition(Point position)
 {
 	Cube::position = position;
-	for (Point p : Cube::verticies) {
-		p.x = position.x;
-		p.y = position.y;
-		p.z = position.z;
+	for (int i = 0;i < std::size(verticies);i++) {
+		verticies[i].x = position.x;
+		verticies[i].y = position.y;
+		verticies[i].z = position.z;
 	}
 }
 
 void Cube::move(Point position)
 {
-	for (Point p : Cube::verticies) {
-		p.x += position.x;
-		p.y += position.y;
-		p.z += position.z;
+	for (int i = 0;i < std::size(verticies);i++) {
+		verticies[i].x += position.x;
+		verticies[i].y += position.y;
+		verticies[i].z += position.z;
 	}
-
 }
 
 void Cube::setDimension(Point position)
@@ -75,26 +74,35 @@ void Cube::rotateZ(float angle)
 	}
 }
 
-void Cube::draw(sf::RenderWindow& window, Camera camera, sf::Vector2f viewdirection)
+void Cube::rotate(Point angle)
+{
+	this->rotateX(angle.x);
+	this->rotateY(angle.y);
+	this->rotateZ(angle.z);
+}
+
+void Cube::draw(sf::RenderWindow& window, Camera camera, Point viewdirection)
 {
 	for (int x = 0; x < std::size(this->faces);x++) {
 		for (int y = 0;y < std::size(this->faces[x]);y++) {
 			struct Point a = this->o_verticies[this->faces[x][y]];
 			struct Point b = this->o_verticies[this->faces[x][(y + 1) % std::size(this->faces[x])]];
 			struct Point c = this->o_verticies[this->faces[x][(y + 2) % std::size(this->faces[x])]];
-			a.x += camera.position.x;
-			a.y += camera.position.y;
-			a.z += camera.position.z;
-			b.x += camera.position.x;
-			b.y += camera.position.y;
-			b.z += camera.position.z;
-			c.x += camera.position.x;
-			c.y += camera.position.y;
-			c.z += camera.position.z;
+			
+			a.x += camera.position.x + viewdirection.x;
+			a.y += camera.position.y + viewdirection.y;
+			a.z += camera.position.z + viewdirection.z;
+			b.x += camera.position.x + viewdirection.x;
+			b.y += camera.position.y + viewdirection.y;
+			b.z += camera.position.z + viewdirection.z;
+			c.x += camera.position.x + viewdirection.x;
+			c.y += camera.position.y + viewdirection.y;
+			c.z += camera.position.z + viewdirection.z;
+			if (a.z > 0 || b.z > 0 || c.z > 0) continue;
 			line(
-				project(translate(a), WIDTH, HEIGHT) + viewdirection,
-				project(translate(b), WIDTH, HEIGHT) + viewdirection,
-				project(translate(c), WIDTH, HEIGHT) + viewdirection,
+				project(translate(a), WIDTH, HEIGHT),
+				project(translate(b), WIDTH, HEIGHT),
+				project(translate(c), WIDTH, HEIGHT),
 				window
 			);
 		}
