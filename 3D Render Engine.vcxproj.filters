@@ -35,5 +35,8 @@
     <ClInclude Include="Point.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="VCube.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

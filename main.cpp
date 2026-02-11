@@ -8,20 +8,46 @@
 constexpr unsigned long WIDTH = 1000;
 constexpr unsigned long HEIGTH = 1000;
 constexpr unsigned long FPS = 60;
+void input(Camera &camera, float SPEED) {
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::W))
+    {
+        camera.position.z += SPEED;
+    } if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::S))
+    {
+        camera.position.z -= SPEED;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::A)) {
+        camera.position.x -= SPEED;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::D)) {
+        camera.position.x += SPEED;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Space)) {
+        camera.position.y += SPEED/2;
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::LShift)) {
+        camera.position.y -= SPEED/2;
+    }
+}
+
 
 int main()
 {
     sf::RenderWindow window(sf::VideoMode({ WIDTH, HEIGTH }), "3D Render Engine!");
-    Cube cube = Cube({ 0,0,0 }, { 0,0,0 }, WIDTH, HEIGTH);
-	Camera camera = Camera({ 0,0,-5 }, { 0,0,1 });
+	Cube *cubes = static_cast<Cube*>(malloc(sizeof(Cube) * 10 * 10 * 10));
+    Camera camera = Camera({ 0,0,-5 }, { 0,0,1 });
+	for (int x = 0; x < 10; x++) {
+        for(int y = 0; y < 10; y++) {
+            for(int z = 0; z < 10; z++) {
+                *(cubes + x*100 + y*10 + z) = Cube({(float)x,(float)y,-(float)z}, {0,0,0});
+            }
+		}
+    }
 
     window.setFramerateLimit(FPS);
     Point viewdirection = { 0,0,0, };
-
-
-        float yaw = 0;
-        float pitch = 0;
-        float dz = 0;
+    float dz = 0;
     while (window.isOpen())
     {
         while (const std::optional event = window.pollEvent())
@@ -30,54 +56,19 @@ int main()
                 window.close();
         }
         dz += 1.0 / FPS;
-        
+
         window.clear();
-
-              
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::W))
-        {
-			camera.position.z += 0.02;
-        } if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::S))
-        {
-			camera.position.z -= 0.02;
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::A)) {
-			camera.position.x -= 0.02;
-        }
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::D)) {
-			camera.position.x += 0.02;
-		}
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Left)) {
-                yaw += 0.1;
+        input(camera, 0.2);
+        for (int x = 0; x < 10*10*10; x++) {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::O)) {
+				(*(cubes + x)).rotate({ dz, dz, dz });
             }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Right)) {
-                yaw -= 0.1;
-            }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Down)) {
-                pitch -= 0.1;
-            }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Up)) {
-                pitch += 0.1;
-            }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Space)) {
-			camera.position.y += 0.1;
+            (*(cubes+x)).draw(window,camera,viewdirection, WIDTH, HEIGTH);
         }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::LShift)) {
-			camera.position.y -= 0.1;
-        }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Q)) {
-            
-        }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::E)) {
-
-            }    
-             viewdirection = { cos(pitch) * sin(yaw),sin(pitch),cos(pitch) * cos(yaw) };
-        
-        cube.rotate({dz,dz,dz});
-
-        cube.draw(window, camera, viewdirection);
-		std::cout << cube.position.z << std::endl;
         window.display();
-        cube.clean();
+        for (int x = 0; x < 10*10*10; x++) {
+            (*(cubes + x)).clean();
+        }
     }
+    cubes = nullptr;
 }
