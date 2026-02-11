@@ -140,14 +140,22 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Body.cpp" />
     <ClCompile Include="Cube.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Body.h" />
     <ClInclude Include="Cube.h" />
+    <ClInclude Include="face.h" />
+    <ClInclude Include="penger.h" />
     <ClInclude Include="Point.h" />
+    <ClInclude Include="teapot.h" />
     <ClInclude Include="VCube.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="teapot.obj.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

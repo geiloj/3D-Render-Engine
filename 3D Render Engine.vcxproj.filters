@@ -13,20 +13,26 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Headerdateien\models">
+      <UniqueIdentifier>{8ea6a7ef-ccc0-4685-bfb1-e45e1085f875}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="Cube.cpp">
+    <ClCompile Include="Body.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="Cube.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Cube.h">
+    <ClInclude Include="Body.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
@@ -35,8 +41,25 @@
     <ClInclude Include="Point.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="VCube.h">
+    <ClInclude Include="Cube.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="face.h">
+      <Filter>Headerdateien\models</Filter>
+    </ClInclude>
+    <ClInclude Include="penger.h">
+      <Filter>Headerdateien\models</Filter>
+    </ClInclude>
+    <ClInclude Include="teapot.h">
+      <Filter>Headerdateien\models</Filter>
+    </ClInclude>
+    <ClInclude Include="VCube.h">
+      <Filter>Headerdateien\models</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="teapot.obj.txt">
+      <Filter>Ressourcendateien</Filter>
+    </Text>
   </ItemGroup>
 </Project>
